@@ -25,8 +25,10 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.tensa.wbfopt.bean.MatVector;
 import org.tensa.wbfopt.bean.SimpleWspace;
 
@@ -41,6 +43,13 @@ public class Wbfopt extends javax.swing.JFrame {
     private List<List<MatVector>> matVector;
     private BufferedImage outputImage;
     private List<Rectangle2D.Double> rectangleList;
+    private javax.swing.filechooser.FileFilter imagePngFileFilter = 
+        new FileNameExtensionFilter("PNG File", "png");
+    private javax.swing.filechooser.FileFilter imageJpgFileFilter = 
+        new FileNameExtensionFilter("JPEG File", "jpg");
+    
+    private javax.swing.filechooser.FileFilter waveFrontFileFilter =
+            new FileNameExtensionFilter("Wave Front File", "obj");
 
     /**
      * Creates new form Wbfopt
@@ -59,18 +68,32 @@ public class Wbfopt extends javax.swing.JFrame {
     private void initComponents() {
 
         jFileChooser1 = new javax.swing.JFileChooser();
+        jFileChooser2 = new javax.swing.JFileChooser();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton3 = new javax.swing.JButton();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jButton4 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         jLabel1 = getNewInputLabel();
         jLabel2 = getNewOutputLabel();
 
+        jFileChooser1.setFileFilter(getWaveFrontFileFilter());
         jFileChooser1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFileChooser1ActionPerformed(evt);
+            }
+        });
+
+        jFileChooser2.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        jFileChooser2.setFileFilter(getImagePngFileFilter());
+        jFileChooser2.addChoosableFileFilter(imagePngFileFilter);
+        jFileChooser2.addChoosableFileFilter(imageJpgFileFilter);
+        jFileChooser2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFileChooser2ActionPerformed(evt);
             }
         });
 
@@ -110,10 +133,38 @@ public class Wbfopt extends javax.swing.JFrame {
         });
         jToolBar1.add(jButton3);
 
+        jToggleButton1.setSelected(true);
+        jToggleButton1.setText("Revision");
+        jToggleButton1.setFocusable(false);
+        jToggleButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToggleButton1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jToggleButton1StateChanged(evt);
+            }
+        });
+        jToolBar1.add(jToggleButton1);
+
+        jButton4.setText("Mueve");
+        jButton4.setFocusable(false);
+        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton4);
+
         jButton2.setText("Salvar");
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton2);
 
         jSplitPane1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -216,6 +267,45 @@ public class Wbfopt extends javax.swing.JFrame {
         jLabel2.repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        final BufferedImage mtlImage = wfwsp.getMtlImage();
+        rectangleList.forEach((Rectangle2D.Double r2DD) -> {
+            try {
+            int[] iArray = null;
+            iArray = mtlImage.getRaster().getPixels((int)r2DD.x-1, (int)r2DD.y-1, (int)r2DD.width+2, (int)r2DD.height+2, iArray);
+            outputImage.getRaster().setPixels((int)r2DD.x-1, (int)r2DD.y-1, (int)r2DD.width+2, (int)r2DD.height+2, iArray);
+            } catch ( ArrayIndexOutOfBoundsException ex) {
+                //
+            }
+        });
+        jLabel2.repaint();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jToggleButton1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jToggleButton1StateChanged
+        jLabel2.repaint();
+    }//GEN-LAST:event_jToggleButton1StateChanged
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            jFileChooser2.showSaveDialog(null);
+        } catch (java.awt.HeadlessException e1) {
+            e1.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jFileChooser2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser2ActionPerformed
+        if (evt.paramString().contains("ApproveSelection")) {
+            try {
+                File selectedFile = jFileChooser2.getSelectedFile();
+                boolean isPng = selectedFile.toString().toLowerCase().endsWith("png");
+                String format = isPng?"png":"jpg";
+                ImageIO.write(outputImage, format, selectedFile);
+            } catch (IOException ex) {
+                Logger.getLogger(Wbfopt.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jFileChooser2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -281,7 +371,7 @@ public class Wbfopt extends javax.swing.JFrame {
                     AffineTransformOp rop = new AffineTransformOp(xforM, AffineTransformOp.TYPE_BILINEAR);
                     localg.drawImage(outputImage, rop, 0, 0);
                     
-                    if (Objects.nonNull(rectangleList)) {
+                    if (Objects.nonNull(rectangleList) && jToggleButton1.isSelected()) {
                         localg.setColor(Color.WHITE);
 //                        localg.translate(0.0,escala);
                         localg.scale(escala, escala);
@@ -351,11 +441,27 @@ public class Wbfopt extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
+
+    public javax.swing.filechooser.FileFilter getImagePngFileFilter() {
+        return imagePngFileFilter;
+    }
+
+    public javax.swing.filechooser.FileFilter getImageJpgFileFilter() {
+        return imageJpgFileFilter;
+    }
+
+    public javax.swing.filechooser.FileFilter getWaveFrontFileFilter() {
+        return waveFrontFileFilter;
+    }
+
 }
