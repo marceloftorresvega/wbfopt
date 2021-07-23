@@ -184,10 +184,8 @@ public class Wbfopt extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jSplitPane1))
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(jSplitPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -195,8 +193,8 @@ public class Wbfopt extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -273,8 +271,8 @@ public class Wbfopt extends javax.swing.JFrame {
         rectangleList.forEach((Rectangle2D.Double r2DD) -> {
             try {
                 int[] iArray = null;
-                iArray = mtlImage.getRaster().getPixels((int) r2DD.x - 2, (int) r2DD.y - 2, (int) r2DD.width + 4, (int) r2DD.height + 4, iArray);
-                outputImage.getRaster().setPixels((int) r2DD.x - 2, (int) r2DD.y - 2, (int) r2DD.width + 4, (int) r2DD.height + 4, iArray);
+                iArray = mtlImage.getRaster().getPixels((int) r2DD.x - 3, (int) r2DD.y - 3, (int) r2DD.width + 6, (int) r2DD.height + 6, iArray);
+                outputImage.getRaster().setPixels((int) r2DD.x - 3, (int) r2DD.y - 3, (int) r2DD.width + 6, (int) r2DD.height + 6, iArray);
             } catch (ArrayIndexOutOfBoundsException ex) {
                 //
             }
