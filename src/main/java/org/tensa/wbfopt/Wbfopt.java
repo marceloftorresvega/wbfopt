@@ -43,13 +43,13 @@ public class Wbfopt extends javax.swing.JFrame {
     private List<List<MatVector>> matVector;
     private BufferedImage outputImage;
     private List<Rectangle2D.Double> rectangleList;
-    private javax.swing.filechooser.FileFilter imagePngFileFilter = 
-        new FileNameExtensionFilter("PNG File", "png");
-    private javax.swing.filechooser.FileFilter imageJpgFileFilter = 
-        new FileNameExtensionFilter("JPEG File", "jpg");
-    
-    private javax.swing.filechooser.FileFilter waveFrontFileFilter =
-            new FileNameExtensionFilter("Wave Front File", "obj");
+    private javax.swing.filechooser.FileFilter imagePngFileFilter
+            = new FileNameExtensionFilter("PNG File", "png");
+    private javax.swing.filechooser.FileFilter imageJpgFileFilter
+            = new FileNameExtensionFilter("JPEG File", "jpg");
+
+    private javax.swing.filechooser.FileFilter waveFrontFileFilter
+            = new FileNameExtensionFilter("Wave Front File", "obj");
 
     /**
      * Creates new form Wbfopt
@@ -210,7 +210,7 @@ public class Wbfopt extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed1
 
     private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
-        
+
         if (evt.paramString().contains("ApproveSelection")) {
             File selectedFile = jFileChooser1.getSelectedFile();
             try {
@@ -223,7 +223,6 @@ public class Wbfopt extends javax.swing.JFrame {
                 outputImage = createCompatibleDestImage(wfwsp.getMtlImage(), null);
                 jComboBox1.setModel(getComboBoxModel());
                 jComboBox1.setSelectedItem(material);
-                
 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Wbfopt.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,9 +233,9 @@ public class Wbfopt extends javax.swing.JFrame {
     }//GEN-LAST:event_jFileChooser1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        
+
         try {
-            material = (String)jComboBox1.getSelectedItem();
+            material = (String) jComboBox1.getSelectedItem();
             wfwsp.readImage(material);
             matVector = wfwsp.getMatFaces().get(material);
             jLabel1.repaint();
@@ -247,7 +246,7 @@ public class Wbfopt extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+
         rectangleList = matVector.stream()
                 .map(l -> {
                     Rectangle2D.Double r = new Rectangle.Double();
@@ -258,9 +257,9 @@ public class Wbfopt extends javax.swing.JFrame {
                             .mapToDouble(MatVector::getY)
                             .summaryStatistics();
                     r.x = summaryX.getMin() * outputImage.getWidth();
-                    r.y = (1-summaryY.getMin()) * outputImage.getWidth();
+                    r.y = (1 - summaryY.getMin()) * outputImage.getWidth();
                     r.width = (summaryX.getMax() - summaryX.getMin()) * outputImage.getWidth();
-                    r.height = (summaryY.getMax() - summaryY.getMin() ) * outputImage.getWidth();
+                    r.height = (summaryY.getMax() - summaryY.getMin()) * outputImage.getWidth();
                     return r;
                 })
                 .collect(Collectors.toList());
@@ -271,10 +270,10 @@ public class Wbfopt extends javax.swing.JFrame {
         final BufferedImage mtlImage = wfwsp.getMtlImage();
         rectangleList.forEach((Rectangle2D.Double r2DD) -> {
             try {
-            int[] iArray = null;
-            iArray = mtlImage.getRaster().getPixels((int)r2DD.x-1, (int)r2DD.y-1, (int)r2DD.width+2, (int)r2DD.height+2, iArray);
-            outputImage.getRaster().setPixels((int)r2DD.x-1, (int)r2DD.y-1, (int)r2DD.width+2, (int)r2DD.height+2, iArray);
-            } catch ( ArrayIndexOutOfBoundsException ex) {
+                int[] iArray = null;
+                iArray = mtlImage.getRaster().getPixels((int) r2DD.x - 2, (int) r2DD.y - 2, (int) r2DD.width + 4, (int) r2DD.height + 4, iArray);
+                outputImage.getRaster().setPixels((int) r2DD.x - 2, (int) r2DD.y - 2, (int) r2DD.width + 4, (int) r2DD.height + 4, iArray);
+            } catch (ArrayIndexOutOfBoundsException ex) {
                 //
             }
         });
@@ -298,7 +297,7 @@ public class Wbfopt extends javax.swing.JFrame {
             try {
                 File selectedFile = jFileChooser2.getSelectedFile();
                 boolean isPng = selectedFile.toString().toLowerCase().endsWith("png");
-                String format = isPng?"png":"jpg";
+                String format = isPng ? "png" : "jpg";
                 ImageIO.write(outputImage, format, selectedFile);
             } catch (IOException ex) {
                 Logger.getLogger(Wbfopt.class.getName()).log(Level.SEVERE, null, ex);
@@ -370,7 +369,7 @@ public class Wbfopt extends javax.swing.JFrame {
                     AffineTransform xforM = AffineTransform.getScaleInstance(escala, escala);
                     AffineTransformOp rop = new AffineTransformOp(xforM, AffineTransformOp.TYPE_BILINEAR);
                     localg.drawImage(outputImage, rop, 0, 0);
-                    
+
                     if (Objects.nonNull(rectangleList) && jToggleButton1.isSelected()) {
                         localg.setColor(Color.WHITE);
 //                        localg.translate(0.0,escala);
@@ -380,13 +379,13 @@ public class Wbfopt extends javax.swing.JFrame {
                         rectangleList.forEach(r -> {
                             localg.draw(r);
                         });
-                       
+
                     }
                 }
             }
         };
     }
-    
+
     public BufferedImage createCompatibleDestImage(BufferedImage src, ColorModel destCM) {
         BufferedImage image;
 
@@ -423,17 +422,17 @@ public class Wbfopt extends javax.swing.JFrame {
 
         return image;
     }
-    
+
     public javax.swing.ComboBoxModel<String> getComboBoxModel() {
         ComboBoxModel<String> model;
-        if(Objects.nonNull(wfwsp)) {
+        if (Objects.nonNull(wfwsp)) {
             String[] items = wfwsp.getMatFaces().keySet().toArray(String[]::new);
             model = new DefaultComboBoxModel<>(items);
 
         } else {
             model = new DefaultComboBoxModel<>();
         }
-        
+
         return model;
     }
 
