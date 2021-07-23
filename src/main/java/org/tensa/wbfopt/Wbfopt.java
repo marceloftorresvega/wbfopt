@@ -129,6 +129,7 @@ public class Wbfopt extends javax.swing.JFrame {
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
+                jButton3ActionPerformed1(evt);
             }
         });
         jToolBar1.add(jButton3);
@@ -152,6 +153,7 @@ public class Wbfopt extends javax.swing.JFrame {
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
+                jButton4ActionPerformed1(evt);
             }
         });
         jToolBar1.add(jButton4);
@@ -304,6 +306,14 @@ public class Wbfopt extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jFileChooser2ActionPerformed
+
+    private void jButton3ActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed1
+        jToggleButton1.setSelected(true);
+    }//GEN-LAST:event_jButton3ActionPerformed1
+
+    private void jButton4ActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed1
+        jToggleButton1.setSelected(false);
+    }//GEN-LAST:event_jButton4ActionPerformed1
 
     /**
      * @param args the command line arguments
