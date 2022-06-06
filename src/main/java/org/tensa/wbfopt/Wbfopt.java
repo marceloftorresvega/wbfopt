@@ -256,10 +256,10 @@ public class Wbfopt extends javax.swing.JFrame {
                     DoubleSummaryStatistics summaryY = l.stream()
                             .mapToDouble(MatVector::getY)
                             .summaryStatistics();
-                    r.x = summaryX.getMin() * outputImage.getWidth();
-                    r.y = (1 - summaryY.getMin()) * outputImage.getWidth();
-                    r.width = (summaryX.getMax() - summaryX.getMin()) * outputImage.getWidth();
-                    r.height = (summaryY.getMax() - summaryY.getMin()) * outputImage.getWidth();
+                    r.x = summaryX.getMin() * (double)outputImage.getWidth();
+                    r.y = (1.0 - summaryY.getMin()) * (double)outputImage.getWidth();
+                    r.width = (summaryX.getMax() - summaryX.getMin()) * (double)outputImage.getWidth();
+                    r.height = (summaryY.getMax() - summaryY.getMin()) * (double)outputImage.getWidth();
                     return r;
                 })
                 .collect(Collectors.toList());
@@ -268,11 +268,13 @@ public class Wbfopt extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         final BufferedImage mtlImage = wfwsp.getMtlImage();
+        final int offset = 0;
+        final int size = 0;
         rectangleList.forEach((Rectangle2D.Double r2DD) -> {
             try {
                 int[] iArray = null;
-                iArray = mtlImage.getRaster().getPixels((int) r2DD.x - 3, (int) r2DD.y - 3, (int) r2DD.width + 6, (int) r2DD.height + 6, iArray);
-                outputImage.getRaster().setPixels((int) r2DD.x - 3, (int) r2DD.y - 3, (int) r2DD.width + 6, (int) r2DD.height + 6, iArray);
+                iArray = mtlImage.getRaster().getPixels((int) Math.round(r2DD.x) - offset, (int) Math.round(r2DD.y) - offset, (int) Math.round(r2DD.width) + size, (int) Math.round(r2DD.height) + size, iArray);
+                outputImage.getRaster().setPixels((int) Math.round(r2DD.x) - offset, (int) Math.round(r2DD.y) - offset, (int) Math.round(r2DD.width) + size, (int) Math.round(r2DD.height) + size, iArray);
             } catch (ArrayIndexOutOfBoundsException ex) {
                 //
             }
@@ -384,9 +386,7 @@ public class Wbfopt extends javax.swing.JFrame {
                         localg.scale(escala, escala);
 //                        localg.getTransform().rotate(Math.PI/4);
 
-                        rectangleList.forEach(r -> {
-                            localg.draw(r);
-                        });
+                        rectangleList.forEach(localg::draw);
 
                     }
                 }
